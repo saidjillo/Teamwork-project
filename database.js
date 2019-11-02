@@ -11,20 +11,6 @@ const client = new Client({
 });
 
 
-client.connect()
-    .then( (con)=>{
-        console.log("Connected Successfully");
-    })
-
-    .catch( (error)=> {
-        console.log("App could not connect to the database");
-    })
-
-    .finally( ()=>{
-        client.end();
-        console.log("Successfully disconnected to the database");
-    });
-
 
 module.exports = client;
 
