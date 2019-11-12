@@ -1,12 +1,11 @@
 class Employees {
 
  
-    constructor(user) {
+    constructor() {
         this.client = require("../database");      
         this.createTable();
         // this.dropTable();   
         this.bcrypt = require("bcrypt");
-        this.user = user;
         this.createAdmin();
     }
 
@@ -27,23 +26,26 @@ class Employees {
 
                 } else {
                     // create table admin
-                    let params = [
-                        "Andela","DevC","AndelaDevC@gmail.com","AndelaDevC2019","male",'admin',"ICT", 
-                        "2555858888"];
-        
-                   this.client.query( 
-                    'INSERT into employees (firstName, lastName, email, password, gender, jobRole, department, address) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING userId', 
-                     params, (err, res)=>{
-
-                        if(err) {
-                            console.log("We could not create admin user");
-                        } else {
-                            console.log("Admin created successfully");
-                        }
-
-                     })
-
-                    console.log("Please Create table admin")
+                    this.bcrypt.hash('AndelaDevC2019', 10).then( (hash)=>{
+                        let params = [
+                            "Andela","DevC","AndelaDevC@gmail.com",hash,"male",'admin',"ICT", 
+                            "2555858888"];
+            
+                        this.client.query( 
+                        'INSERT into employees (firstName, lastName, email, password, gender, jobRole, department, address) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING userId', 
+                         params, (err, res)=>{
+    
+                            if(err) {
+                                console.log("We could not create admin user");
+                            } else {
+                                console.log("Admin created successfully");
+                            }
+    
+                         })
+    
+                        console.log("Please Create table admin")
+                    })
+            
                 }
             }
         )
@@ -51,25 +53,25 @@ class Employees {
 
 
 
-    // dropTable() {
-    //     this.client.query("DROP TABLE employees", (err, res)=>{
-    //         console.log("ERROR ==> " + err);
-    //         console.log("RESPONSE ==> " + res);
-    //     })
-    // }
+    dropTable() {
+        this.client.query("DROP TABLE employees", (err, res)=>{
+            console.log("ERROR ==> " + err);
+            console.log("RESPONSE ==> " + res);
+        })
+    }
 
 
 
     // create employees and save into the databse
-    async save() {
+    async save(user) {
 
-        let hash = await this.bcrypt.hash(this.user.password, 10);
+        let hash = await this.bcrypt.hash(user.password, 10);
 
-        let params = [this.user.firstName,
-            this.user.lastName,this.user.email, 
-            hash, this.user.gender, 
-            this.user.jobRole,this.user.department, 
-            this.user.address];
+        let params = [user.firstName,
+            user.lastName,user.email, 
+            hash, user.gender, 
+            user.jobRole,user.department, 
+            user.address];
 
            let result = await this.client.query( 
             'INSERT into employees (firstName, lastName, email, password, gender, jobRole, department, address) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING userId', 
@@ -89,9 +91,15 @@ class Employees {
                                 
     }
 
-    // isAdmin() {
-    
-    // }
+    async findOne(email){
+     
+        let user = await this.client.query("SELECT * FROM employees WHERE email= $1", [email]);
+        console.log("The returned user is ==>: "+ user.rows[0]);
+        return user.rows[0];
+
+    }
+
+
 
 
 }
