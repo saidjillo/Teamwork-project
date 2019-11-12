@@ -13,7 +13,7 @@ class Gif {
             "CREATE TABLE IF NOT EXISTS gifs(gifId SERIAL,title varchar(255) NOT NULL,imageUrl varchar(3000) NOT NULL,createdOn varchar(255) NOT NULL ,createdBy int NOT NULL,PRIMARY KEY (gifId))");
     }
 
-    // drop table articles ---- ONLY FOR DEVELEOPMENT PURPOSES AND SHOULD NOT BE USED IN PRODUCTION
+    // drop table gifs ---- ONLY FOR DEVELEOPMENT PURPOSES AND SHOULD NOT BE USED IN PRODUCTION
     dropTable() {
         console.log("DELETING TABLE....");
         this.client.query("DROP TABLE gifs", (err, res)=>{
@@ -21,7 +21,7 @@ class Gif {
     }
 
 
-    // create new article and save into the databse
+    // create new gif and save into the databse
     async save(gif_obj) {
 
 
@@ -44,7 +44,7 @@ class Gif {
     }
 
 
-    // return one article from the database
+    // return one gif from the database
     async findOne(id){
      
         let gif = await this.client.query("SELECT * FROM gifs WHERE gifId= $1", [id]);
@@ -54,7 +54,7 @@ class Gif {
 
 
 
-    // Update and return one article from the database
+    // Update and return one gif from the database
     async updateOne(gif){
         this.client.query(
             "UPDATE gifs SET title=($1), imageUrl=($2) WHERE gifId=($3)",
@@ -66,13 +66,13 @@ class Gif {
 
 
 
-    // delete one article from the database with the specified id
+    // delete one gif from the database with the specified id
     async deleteOne(id) {
         this.client.query("DELETE FROM articles WHERE gifId = $1", [id]);
     }
 
 
-    // return all articles from database order by most recent items
+    // return all gif from database order by most recent items
     async find() {
         let gifs = await this.client.query("SELECT * FROM gifs ORDER BY createdOn");
         return gifs.rows;
