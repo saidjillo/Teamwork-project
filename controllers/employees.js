@@ -4,7 +4,9 @@ const Employees = require("../models/employees");
 
 const employee = new Employees();
 
+
 exports.signup = (req, res, next)=>{
+
     const user = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -15,13 +17,11 @@ exports.signup = (req, res, next)=>{
         department: req.body.department,
         address: req.body.address,
     };
-
-
-    
+ 
     employee.save(user)
         
         .then( (result)=>{
-            console.log("Result is ==> :" + result);
+     
             res.status(201).json( {
                 status: "success",
                 data: {
@@ -34,17 +34,29 @@ exports.signup = (req, res, next)=>{
                     gender: result.gender,
                     jobRole: result.jobRole,
                     department: result.department,
-                    address: result.address
-                },
+                    address: result.address,
+                    error: false
+                }
         
             });
         })
 
         .catch( (error)=>{
-            console.log("ERROR IS ==> :"+ error);
             res.status(500).json({
                 status: "unsuccessful",
-                error: error
+                data: {
+                    message: "User account successfully created",
+                    token: "string",
+                    userId: "",
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    gender: "",
+                    jobRole: "",
+                    department: "",
+                    address: "",
+                    error: true
+                }
             });
         });
 
@@ -54,10 +66,10 @@ exports.signup = (req, res, next)=>{
 
 exports.login = (req, res, next) =>{
 
-    // console.log("The user is ==> :" + req.body.email.toLowerCase());
     employee.findOne(req.body.email)
         
         .then( (user)=>{
+
             if(!user){
                 return res.status(401).json({
                     
@@ -116,48 +128,11 @@ exports.login = (req, res, next) =>{
                     error: "Something went wrong. Try again lator",
                 }
                
-            })
+            });
         });
 
 
 
 }
 
-
-
-// exports.login = (req, res, next)=> {
-//     User.findOne({email: req.body.email}).then( (user)=>{
-//         if(!user){
-//             return res.status(401).json({
-//                 error: new Error('User not found')
-//             });
-//         }
-
-//         bcrypt.compare(req.body.password, user.password).then( (valid)=>{
-//             if(!valid){
-//                 return res.status(401).json({
-//                     error: new Error('Email or is not correct')
-//                 });
-//             }
-
-//             const token = jwt.sign(
-//                 {userId: user._id}, 
-//                 'RANDOM_TOKEN_SECRET', 
-//                 {expiresIn: '24h'});
-
-//             res.status(200).json({
-//                 userId: user._id,
-//                 token: token
-//             });
-//         }).catch( (error)=>{
-//             res.status(500).json({
-//                 error: error
-//             });
-//         });
-//     }).catch( (error)=>{
-//         res.status(500).json({
-//             error: error
-//         });
-//     });
-// };
 
