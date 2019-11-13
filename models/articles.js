@@ -60,11 +60,18 @@ class Articles {
     }
 
     // Update and return one article from the database
+    async updateOne(id, article){
+        this.client.query(
+            "UPDATE articles SET title=($1), article=($2) WHERE articleId=($3)",
+            [article.title, article.article, id], (err, res)=>{
+                let modified_article =  this.client.query("SELECT * FROM articles WHERE articleId= $4", [id]);
+
     async updateOne(article){
         this.client.query(
             "UPDATE articles SET title=($1), article=($2) WHERE articleId=($3)",
             [article.title, article.article, article.userId], (err, res)=>{
                 let modified_article =  this.client.query("SELECT * FROM articles WHERE articleId= $4", [article.userId]);
+
                 return modified_article.rows[0];
             })
     }
