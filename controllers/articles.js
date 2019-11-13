@@ -47,10 +47,11 @@ exports.createArticle = (req,res,next) =>{
 
 
 exports.getOneArticle = (req, res, next)=>{
+    
+    console.log("The parameter is: "+ req.params.articleId);
 
     article.findOne(req.params.articleId)
-    
-        
+       
       .then( (item)=>{
           res.status(200).json({
             status: "success",
@@ -66,14 +67,17 @@ exports.getOneArticle = (req, res, next)=>{
                         authorId: ""
                     },
                 ] ,
-                error: false
+               
             }
           });
        })
        
        .catch( (error)=>{
           res.status(404).json({
-              error: error
+            status: "error",
+            data: {
+                message: "Article could not be found",
+            }
           });
        });
 
@@ -82,7 +86,7 @@ exports.getOneArticle = (req, res, next)=>{
 
 
 exports.deleteArticle = (req, res, next)=>{
-              
+    console.log("DELETING ARTICLE....");
     article.deleteOne(req.params.articleId)
 
     .then( ()=>{
@@ -195,14 +199,23 @@ exports.modifyArticle = (req, res, next)=>{
 
 exports.getAllArticles = (req,res,next)=>{
 
+    console.log("The get all articles has been called");
     article.find()
 
         .then( (items)=>{
-
+            res.status(200).json({
+                status: "success",
+                data: items        
+            });
         })
 
         .catch( (error)=>{
-
+            res.status(404).json({
+                status: "error",
+                data: {
+                    message: "Error loading articles from the database.",
+                }
+            })
         });
 
 };
