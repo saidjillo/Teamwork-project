@@ -27,6 +27,7 @@ exports.createGif = (req,res,next) =>{
         })
 
         .catch( (error)=>{
+            // error message
             res.status(400).json({
                 status: "error",
                 error: "GIF image could not be posted"                
