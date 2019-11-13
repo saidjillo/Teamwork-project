@@ -17,7 +17,7 @@ exports.createGif = (req,res,next) =>{
                 status: "success",
                 data: {
                     message: "GIF image successfully posted",
-                    articleId: item.articleid,
+                    articleId: item.gifid,
                     createdOn: item.createdon,
                     title: item.title,
                     imageUrl: item.imageUrl,
@@ -34,6 +34,32 @@ exports.createGif = (req,res,next) =>{
               })
         });
     
+};
+
+
+exports.deleteGif = (req, res, next)=>{
+              
+    gif.deleteOne(req.params.gifId)
+
+    .then( ()=>{
+        res.status(201).json({
+            status: "success",
+            data: {
+                message: "GIF image successfully deleted",
+            }
+        });
+    })
+
+    .catch( (error)=>{
+        res.status(404).json({
+            status: "error",
+            data: {
+                message: "GIF image could not be deleted",
+            }
+        })
+    });
+
+};
 
 
 exports.getAllGifs = (req,res,next)=>{
