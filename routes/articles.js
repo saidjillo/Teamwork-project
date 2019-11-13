@@ -5,8 +5,11 @@ const router = express.Router();
 
 articlesCtrl = require('../controllers/articles');
 
+
+router.get('/', articlesCtrl.getAllArticles);
+router.get('/:articleId', articlesCtrl.getOneArticle);
 router.post('/', articlesCtrl.createArticle);
-router.get('/:articleId', articlesCtrl.getOneThing);
+router.put('/:articleId', articlesCtrl.modifyArticle);
 router.delete('/:articleId', articlesCtrl.deleteArticle);
 
 
