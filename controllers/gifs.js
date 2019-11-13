@@ -34,5 +34,22 @@ exports.createGif = (req,res,next) =>{
               })
         });
     
- 
+
+
+exports.getAllGifs = (req,res,next)=>{
+
+    gif.find()
+
+        .then( (items)=>{
+            // loop through all items
+        })
+
+        .catch( (error)=>{
+            res.status(400).json({
+                status: "error",
+                error: "GIF images could not be fetched."                
+              })
+        });
+
+
 };
