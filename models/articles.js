@@ -65,6 +65,9 @@ class Articles {
             "UPDATE articles SET title=($1), article=($2) WHERE articleId=($3)",
             [article.title, article.article, id], (err, res)=>{
                 let modified_article =  this.client.query("SELECT * FROM articles WHERE articleId= $4", [id]);
+                return modified_article.rows[0];
+            });
+    }
 
 
     async updateOne(article){
