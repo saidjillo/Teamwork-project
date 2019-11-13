@@ -36,6 +36,39 @@ exports.createGif = (req,res,next) =>{
     
 };
 
+exports.getOneGif = (req, res, next)=>{
+
+    gif.findOne(req.params.gifId)
+    
+        
+      .then( (item)=>{
+          res.status(200).json({
+            status: "success",
+            data: {
+                id: item.gifid,
+                createdOn: item.createdon,
+                title: item.title,
+                imageUrl: item.imageUrl,
+                comments: [
+                    {
+                        commentId: "",
+                        comment: "",
+                        authorId: ""
+                    },
+                ] ,
+            }
+          });
+       })
+       
+       .catch( (error)=>{
+          res.status(404).json({
+            status: "error",
+            error: "GIF image could not be found."   
+          });
+       });
+
+};
+
 
 exports.deleteGif = (req, res, next)=>{
               
