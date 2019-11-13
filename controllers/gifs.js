@@ -34,8 +34,6 @@ exports.createGif = (req,res,next) =>{
               })
         });
     
- 
-};
 
 
 exports.getAllGifs = (req,res,next)=>{
@@ -52,5 +50,6 @@ exports.getAllGifs = (req,res,next)=>{
                 error: "GIF images could not be fetched."                
               })
         });
+
 
 };
