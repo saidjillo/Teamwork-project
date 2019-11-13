@@ -190,3 +190,18 @@ exports.modifyArticle = (req, res, next)=>{
 
 };
 
+
+exports.getAllArticles = (req,res,next)=>{
+
+    article.find()
+
+        .then( (items)=>{
+
+        })
+
+        .catch( (error)=>{
+
+        });
+
+};
+
