@@ -46,6 +46,7 @@ exports.createArticle = (req,res,next) =>{
 };
 
 
+
 exports.getOneArticle = (req, res, next)=>{
 
     article.findOne(req.params.articleId)
@@ -206,5 +207,6 @@ exports.getAllArticles = (req,res,next)=>{
         });
 
 };
+
 
 

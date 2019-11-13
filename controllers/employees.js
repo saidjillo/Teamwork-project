@@ -2,8 +2,11 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Employees = require("../models/employees");
 
+const employee = new Employees();
+
 
 exports.signup = (req, res, next)=>{
+
     const user = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -14,13 +17,11 @@ exports.signup = (req, res, next)=>{
         department: req.body.department,
         address: req.body.address,
     };
-
-    const employee = new Employees(user);
-    
-    employee.save()
+ 
+    employee.save(user)
         
         .then( (result)=>{
-            console.log("Result is ==> :" + result);
+     
             res.status(201).json( {
                 status: "success",
                 data: {
@@ -33,19 +34,105 @@ exports.signup = (req, res, next)=>{
                     gender: result.gender,
                     jobRole: result.jobRole,
                     department: result.department,
-                    address: result.address
-                },
+                    address: result.address,
+                    error: false
+                }
         
             });
         })
 
         .catch( (error)=>{
-            console.log("ERROR IS ==> :"+ error);
             res.status(500).json({
                 status: "unsuccessful",
-                error: error
+                data: {
+                    message: "User account successfully created",
+                    token: "string",
+                    userId: "",
+                    firstName: "",
+                    lastName: "",
+                    email: "",
+                    gender: "",
+                    jobRole: "",
+                    department: "",
+                    address: "",
+                    error: true
+                }
             });
         });
 
 };
+
+
+
+exports.login = (req, res, next) =>{
+
+    employee.findOne(req.body.email)
+        
+        .then( (user)=>{
+
+            if(!user){
+                return res.status(401).json({
+                    
+                    status: "unsuccessful",
+                    data: {
+                        error: "User not found",
+                    }
+                })
+            }
+
+            bcrypt.compare(req.body.password, user.password)
+                .then( (valid)=>{
+
+                    if(!valid){
+                      
+                        return res.status(401).json({
+                            status: "unsuccessful",
+                            data: {
+                                error: "Email or password is not correct",
+                            }
+                            
+                        });
+                        
+                    }
+
+                    const token = jwt.sign(
+                        {userId: user.userId},
+                        'RANDOM_TOKEN_SECRET',
+                        {expiresIn: '24'});
+            
+                    res.status(200).json({
+                        status: "success",
+                        data: {
+                            token: token,
+                            userId: user.userid
+                        }
+                    });
+
+                })
+
+                .catch( (error)=>{
+                    return res.status(500).json({
+                        status: "unsuccessful",
+                        data: {
+                            error: "Email or password is not correct",
+                        }
+                    });
+                });
+        })
+
+
+        .catch( (error)=>{
+            return res.status(500).json({
+                status: "unsuccessful",
+                data: {
+                    error: "Something went wrong. Try again lator",
+                }
+               
+            });
+        });
+
+
+
+}
+
 
