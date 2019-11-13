@@ -6,7 +6,7 @@ const router = express.Router();
 employeesCtrl = require('../controllers/employees');
 
 router.post('/create-user', employeesCtrl.signup);
-// router.post('/signin', employeesCtrl);
+router.post('/signin', employeesCtrl.login);
 
 
 module.exports = router;
