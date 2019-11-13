@@ -43,7 +43,7 @@ exports.getAllGifs = (req,res,next)=>{
     gif.find()
 
         .then( (items)=>{
-
+            // loop through all items
         })
 
         .catch( (error)=>{
