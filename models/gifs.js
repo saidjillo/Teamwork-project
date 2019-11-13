@@ -1,6 +1,5 @@
 class Gif {
 
- 
     constructor() {
         this.client = require("../database");      
         this.createTable();
@@ -77,7 +76,6 @@ class Gif {
         let gifs = await this.client.query("SELECT * FROM gifs ORDER BY createdOn");
         return gifs.rows;
     }
-
 
 }
 
